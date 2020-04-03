@@ -1,0 +1,45 @@
+{
+  "name": "@dashkite/minion",
+  "version": "0.0.0",
+  "description": "Project plan generator based on Markdown and YAML",
+  "main": "build/src/index.js",
+  "files": [
+    "./build"
+  ],
+  "bin": {
+    "minion": "./build/src/bin/minion"
+  },
+  "dependencies": {
+    "js-yaml": "^3.13.1",
+    "luxon": "^1.23.0",
+    "panda-quill": "^5.0.0",
+    "tablemark": "^2.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.8.7",
+    "@babel/preset-env": "^7.8.7",
+    "amen": "^3.0.0",
+    "panda-9000": "^5.0.2",
+    "panda-builder": "^4.0.13"
+  },
+  "scripts": {
+    "test": "p9k test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dashkite/minion.git"
+  },
+  "keywords": [
+    "project",
+    "plan",
+    "generator",
+    "markdown",
+    "yaml"
+  ],
+  "author": "Dan Yoder",
+  "license": "SEE LICENSE IN FILE LICENSE.md",
+  "bugs": {
+    "url": "https://github.com/dashkite/minion/issues"
+  },
+  "homepage": "https://github.com/dashkite/minion#readme"
+}

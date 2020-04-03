@@ -1,0 +1,4 @@
+#!/usr/bin/env node
+
+// figure out how to pass --enable-source-maps in a portable way
+require("../cli.js")
