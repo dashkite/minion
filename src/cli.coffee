@@ -5,9 +5,9 @@ import generate from "../src"
 
 do ->
   try
-    [ _plan, _process ] = process.argv[2..]
+    [ _plan, _workflows ] = process.argv[2..]
     console.log generate
       plan: YAML.safeLoad await read _plan
-      process: YAML.safeLoad await read _process
+      workflows: YAML.safeLoad await read _workflows
   catch error
     console.error error

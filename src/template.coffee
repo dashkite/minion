@@ -34,12 +34,28 @@ table = (headings, transform, rows) ->
 header = ({plan}) -> h2 "Project: #{plan.name}"
 
 releases = ({plan}) -> [
+
   h3 "Releases"
 
   table ["Release", "Start", "Finish"],
     ({name, start, finish}) ->
-      [ name, (start.toFormat "DD"), (finish.toFormat "DD") ]
+      [ name, (start.format "ll"), (finish.format "ll") ]
     plan.releases
+
+  h3 "Slack"
+
+  table [ "Duration", "People", "Capacity", "Effort", "Slack" ],
+    ({duration, people, capacity, effort, slack}) ->
+      [
+        "#{duration.asDays()} days"
+        people
+        "#{capacity.asDays()} days"
+        "#{effort.asDays()} days"
+        "#{slack.asDays()} days"
+      ]
+    [ plan ]
+
+  ": Weekends and holidays excluded."
 ]
 
 components = ({plan, process}) -> [
@@ -48,15 +64,17 @@ components = ({plan, process}) -> [
 
   for component in plan.components
 
-    if (tasks = process.components[ component.type ])?
+    component.type = "component"
 
-      [
-        h4 component.name
+    [
 
-        component.description
+      h4 component.name
 
-        join "\n", ("- #{task.name}" for task in tasks)
-      ]
+      component.description
+
+      tasks component, process
+
+    ]
 ]
 
 features = ({plan, process}) -> [
@@ -65,16 +83,33 @@ features = ({plan, process}) -> [
 
   for feature in plan.features
 
-    if (tasks = process.features[ feature.type ])?
+    feature.type = "feature"
 
-      [
-        h4 feature.name
+    [
 
-        feature.description
+      h4 feature.name
 
-        join "\n", ("- #{task.name}" for task in tasks)
-      ]
+      feature.description
+
+      tasks feature, process
+
+    ]
 ]
+
+tasks = (product, process) ->
+
+  if (product.tasks)?
+
+    [
+
+      join "\n",
+
+        for task in product.tasks
+          "- #{task.name} (#{task.effort.humanize()})"
+
+      "Total: #{product.effort.humanize()}"
+
+    ]
 
 render = stitch [
   header
