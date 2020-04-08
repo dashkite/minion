@@ -65,15 +65,17 @@ approach = ({workflows}) -> [
   h2 "Workflows"
 
   for type, flows of workflows
-    for name, flow of flows
-      [
-        h3 "#{titleCase name} #{titleCase type}"
-        flow.description
-        h4 "Tasks"
-        join "\n",
-          for task in flow.tasks
-            "- #{task.name}"
-      ]
+    [
+      h2 titleCase type
+      flows.description
+
+      for name, flow of flows.roles
+        [
+          h3 titleCase name
+          flow.description
+          "Tasks: #{join ", ", (task.name for task in flow.tasks)}."
+        ]
+    ]
 ]
 
 products = ({plan}) -> [

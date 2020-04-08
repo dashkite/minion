@@ -35,7 +35,7 @@ compute =
     plan.effort = moment.duration 0
     for type in [ "components", "features" ]
       for product in plan[ type ]
-        if (workflow = workflows[ type ][ product.workflow ])?
+        if (workflow = workflows[ type ].roles[ product.role ])?
           product.effort = moment.duration 0
           product.tasks = []
           for {name, effort} in workflow.tasks
