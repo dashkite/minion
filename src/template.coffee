@@ -1,4 +1,7 @@
 import tablemark from "tablemark"
+import {titleCase} from "panda-parchment"
+
+identity = (x) -> x
 
 join = (d, sx) -> sx.join d
 
@@ -35,87 +38,68 @@ header = ({plan}) -> h2 "Project: #{plan.name}"
 
 releases = ({plan}) -> [
 
-  h3 "Releases"
+  h2 "Releases"
 
-  table ["Release", "Start", "Finish"],
-    ({name, start, finish}) ->
-      [ name, (start.format "ll"), (finish.format "ll") ]
-    plan.releases
+  for {name, start, finish} in plan.releases
+    [
+      h3 name
+      "Start: #{start.format "ll"}. Finish: #{finish.format "ll"}"
+    ]
+]
 
-  h3 "Slack"
+work = ({plan: {duration, people, capacity, slack}}) -> [
 
-  table [ "Duration", "People", "Capacity", "Effort", "Slack" ],
-    ({duration, people, capacity, effort, slack}) ->
+  h2 "Work Effort"
+
+  """
+  The project duration is #{duration.asDays()} works days
+  (weekends and holidays excluded).
+  We have #{people} full-time equivalent people assigned,
+  representing a capacity of #{capacity.asDays()} work days,
+  allowing for #{slack.asDays()} days of slack.
+  """
+]
+
+approach = ({workflows}) -> [
+
+  h2 "Workflows"
+
+  for type, flows of workflows
+    for name, flow of flows
       [
-        "#{duration.asDays()} days"
-        people
-        "#{capacity.asDays()} days"
-        "#{effort.asDays()} days"
-        "#{slack.asDays()} days"
+        h3 "#{titleCase name} #{titleCase type}"
+        flow.description
+        h4 "Tasks"
+        join "\n",
+          for task in flow.tasks
+            "- #{task.name}"
       ]
-    [ plan ]
-
-  ": Weekends and holidays excluded."
 ]
 
-components = ({plan, process}) -> [
+products = ({plan}) -> [
 
-  h3 "Components"
-
-  for component in plan.components
-
-    component.type = "component"
-
+  for type in [ "features", "components" ]
     [
+      h2 titleCase type
 
-      h4 component.name
-
-      component.description
-
-      tasks component, process
-
+      for {name, description, effort} in plan[ type ]
+        [
+          # intentionally skipping a heading level
+          h4 name
+          "#{description[..-2]} (#{effort.humanize()})."
+        ]
     ]
 ]
 
-features = ({plan, process}) -> [
 
-  h2 "Features"
 
-  for feature in plan.features
-
-    feature.type = "feature"
-
-    [
-
-      h4 feature.name
-
-      feature.description
-
-      tasks feature, process
-
-    ]
-]
-
-tasks = (product, process) ->
-
-  if (product.tasks)?
-
-    [
-
-      join "\n",
-
-        for task in product.tasks
-          "- #{task.name} (#{task.effort.humanize()})"
-
-      "Total: #{product.effort.humanize()}"
-
-    ]
 
 render = stitch [
-  header
+  # header
   releases
-  components
-  features
+  work
+  approach
+  products
 ]
 
 export default render

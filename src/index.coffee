@@ -35,10 +35,10 @@ compute =
     plan.effort = moment.duration 0
     for type in [ "components", "features" ]
       for product in plan[ type ]
-        if (tasks = workflows[ type ][ product.workflow ])?
+        if (workflow = workflows[ type ][ product.workflow ])?
           product.effort = moment.duration 0
           product.tasks = []
-          for {name, effort} in tasks
+          for {name, effort} in workflow.tasks
             task = {name}
             task.effort = scale (moment.duration effort),
               factors[ product.cost ]
