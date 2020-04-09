@@ -42,7 +42,7 @@ releases = ({plan}) -> [
 
   for {name, start, finish} in plan.releases
     [
-      h3 name
+      h4 name
       "Start: #{start.format "ll"}. Finish: #{finish.format "ll"}"
     ]
 ]
@@ -71,9 +71,11 @@ approach = ({workflows}) -> [
 
       for name, flow of flows.roles
         [
-          h3 titleCase name
-          flow.description
-          "Tasks: #{join ", ", (task.name for task in flow.tasks)}."
+          h4 titleCase name
+          """
+          #{flow.description}
+          Tasks: #{join ', ', (task.name for task in flow.tasks)}.
+          """
         ]
     ]
 ]
