@@ -47,13 +47,14 @@ releases = ({plan}) -> [
     ]
 ]
 
-work = ({plan: {duration, people, capacity, slack}}) -> [
+work = ({plan: {duration, effort, people, capacity, slack}}) -> [
 
   h2 "Work Effort"
 
   """
   The project duration is #{duration.asDays()} works days
   (weekends and holidays excluded).
+  The project requires #{effort.asDays()} work to complete.
   We have #{people} full-time equivalent people assigned,
   representing a capacity of #{capacity.asDays()} work days,
   allowing for #{slack.asDays()} days of slack.
